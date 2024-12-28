@@ -18,14 +18,14 @@ class CLIC(LightningDataModule):
         self.persistent_workers = persistent_workers
 
         self.train_batch_size = train_batch_size
-        self.train_transform = transforms.Compose([transforms.RandomCrop(train_patch_size), transforms.ToTensor()])
+        self.train_transform = transforms.Compose([transforms.RandomCrop(train_patch_size,pad_if_needed=True,padding_mode='reflect'),transforms.RandomHorizontalFlip(),transforms.ToTensor()])
 
         self.valid_batch_size = valid_batch_size
         self.valid_transform = transforms.Compose([transforms.CenterCrop(valid_patch_size), transforms.ToTensor()])
 
     def setup(self, stage):
-        self.clic_train = ImageFolder(root=self.data_dir, split='train', transform=self.train_transform)
-        self.clic_valid = ImageFolder(root=self.data_dir, split='valid', transform=self.valid_transform)
+        self.clic_train = ImageFolder(root=self.data_dir, split='train2017', transform=self.train_transform)
+        self.clic_valid = ImageFolder(root=self.data_dir, split='kodak', transform=self.valid_transform)
 
     def train_dataloader(self):
         return DataLoader(self.clic_train, batch_size=self.train_batch_size,

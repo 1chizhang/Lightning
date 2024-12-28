@@ -1,4 +1,4 @@
-# Copyright (c) 2021-2022, InterDigital Communications, Inc
+# Copyright (c) 2021-2024, InterDigital Communications, Inc
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without
@@ -61,7 +61,7 @@ class ImageFolder(Dataset):
         splitdir = Path(root) / split
 
         if not splitdir.is_dir():
-            raise RuntimeError(f'Invalid directory "{root}"')
+            raise RuntimeError(f'Missing directory "{splitdir}"')
 
         self.samples = sorted(f for f in splitdir.iterdir() if f.is_file())
 
@@ -74,11 +74,20 @@ class ImageFolder(Dataset):
 
         Returns:
             img: `PIL.Image.Image` or transformed `PIL.Image.Image`.
+            If image is corrupted, returns None.
         """
-        img = Image.open(self.samples[index]).convert("RGB")
-        if self.transform:
-            return self.transform(img)
-        return img
+        try:
+            img = Image.open(self.samples[index]).convert("RGB")
+            if self.transform:
+                return self.transform(img)
+            return img
+        except (OSError, IOError) as e:
+            print(f"Error loading image {self.samples[index]}: {str(e)}")
+            return None
+        
+        
+
+
 
     def __len__(self):
         return len(self.samples)

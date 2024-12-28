@@ -1,4 +1,4 @@
-# Copyright (c) 2021-2022, InterDigital Communications, Inc
+# Copyright (c) 2021-2024, InterDigital Communications, Inc
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without
@@ -38,7 +38,7 @@ from setuptools import find_packages, setup
 cwd = Path(__file__).resolve().parent
 
 package_name = "compressai"
-version = "1.2.4.dev0"
+version = "1.2.6.dev0"
 git_hash = "unknown"
 
 
@@ -106,6 +106,10 @@ DEV_REQUIRES = TEST_REQUIRES + [
     "isort",
     "mypy",
 ]
+POINTCLOUD_REQUIRES = [
+    "pointops-yoda",
+    "pyntcloud-yoda",  # Patched version of pyntcloud.
+]
 
 
 def get_extra_requirements():
@@ -114,6 +118,7 @@ def get_extra_requirements():
         "dev": DEV_REQUIRES,
         "doc": ["sphinx", "sphinx-book-theme", "Jinja2<3.1"],
         "tutorials": ["jupyter", "ipywidgets"],
+        "pointcloud": POINTCLOUD_REQUIRES,
     }
     extras_require["all"] = {req for reqs in extras_require.values() for req in reqs}
     return extras_require
@@ -128,14 +133,19 @@ setup(
     author_email="compressai@interdigital.com",
     packages=find_packages(exclude=("tests",)),
     zip_safe=False,
-    python_requires=">=3.6",
+    python_requires=">=3.8",
     install_requires=[
-        "numpy",
+        "einops",
+        "numpy>=1.21.0",
+        "pandas",
         "scipy",
         "matplotlib",
-        "torch>=1.7.1",
+        "torch>=1.7.1, <2.3",
+        "torch-geometric>=2.3.0",
+        "typing-extensions>=4.0.0",
         "torchvision",
         "pytorch-msssim",
+        "tqdm",
     ],
     extras_require=get_extra_requirements(),
     license="BSD 3-Clause Clear License",
@@ -144,10 +154,9 @@ setup(
         "Intended Audience :: Developers",
         "Intended Audience :: Science/Research",
         "License :: OSI Approved :: BSD License",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
     ],
     ext_modules=get_extensions(),

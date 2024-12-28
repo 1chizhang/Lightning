@@ -61,14 +61,18 @@ All three data subsets described above can be downloaded from this [link](https:
 ### Training
 All the configurations regarding dataloader, training strategy, and etc should be set in the `lit_config.py` followed by the command:
 ```bash
-python lit_train.py --comment "simple comment for the experiment"
+python lit_train.py --comment "ema ddp compile full precision TCM-L COCO2017"
 ```
-
+<!-- 1479184 for flickr30k -->
+<!-- 1478600 for train2017 -->
 ### Evaluation
 To evaluate a saved checkpoint of a model, `compressai.utils.eval` is used. An example to test the rate-distoriton perfomance of a SwinT-ChARM checkpoint:
 
 ```bash
-python -m compressai.utils.eval_model checkpoint path/to/data/directory  -a zyc2022-swint-charm --cuda -v -p path/to/a/checkpoint
+python -m compressai.utils.eval_model checkpoint /home/yichi/Project/dataset/kodak  -a tcm --cuda -v -p /home/yichi/Project/Lightning/ckpt/tcm-lambda=0.013-beta=None/lightning_logs/Flickr30k/version_2/checkpoints/epoch=263-loss=1.6261-last.ckpt
+   
+python -m compressai.utils.eval_model checkpoint /home/yichi/Project/dataset/kodak  -a tcm --cuda -v -p /home/yichi/Project/Lightning/ckpt/tcm-lambda=0.013-beta=None/lightning_logs/Flickr30k/desired_517510.ckpt
+
 ```
 
 

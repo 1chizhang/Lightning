@@ -1,4 +1,4 @@
-# Copyright (c) 2021-2022, InterDigital Communications, Inc
+# Copyright (c) 2021-2024, InterDigital Communications, Inc
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without
@@ -103,6 +103,9 @@ class HyperpriorLatentCodec(LatentCodec):
             save_direct=True,
         )
 
+    def __getitem__(self, key: str) -> LatentCodec:
+        return self.latent_codec[key]
+
     def forward(self, y: Tensor) -> Dict[str, Any]:
         hyper_out = self.latent_codec["hyper"](y)
         y_out = self.latent_codec["y"](y, hyper_out["params"])
@@ -125,7 +128,7 @@ class HyperpriorLatentCodec(LatentCodec):
         }
 
     def decompress(
-        self, strings: List[List[bytes]], shape: Dict[str, Tuple[int, ...]]
+        self, strings: List[List[bytes]], shape: Dict[str, Tuple[int, ...]], **kwargs
     ) -> Dict[str, Any]:
         *y_strings_, z_strings = strings
         assert all(len(y_strings) == len(z_strings) for y_strings in y_strings_)

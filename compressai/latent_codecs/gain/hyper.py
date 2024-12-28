@@ -1,4 +1,4 @@
-# Copyright (c) 2021-2022, InterDigital Communications, Inc
+# Copyright (c) 2021-2024, InterDigital Communications, Inc
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without
@@ -102,7 +102,11 @@ class GainHyperLatentCodec(LatentCodec):
         return {"strings": [z_strings], "shape": shape, "params": params}
 
     def decompress(
-        self, strings: List[List[bytes]], shape: Tuple[int, int], gain_inv: Tensor
+        self,
+        strings: List[List[bytes]],
+        shape: Tuple[int, int],
+        gain_inv: Tensor,
+        **kwargs,
     ) -> Dict[str, Any]:
         (z_strings,) = strings
         z_hat = self.entropy_bottleneck.decompress(z_strings, shape)
