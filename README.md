@@ -4,9 +4,12 @@ In a virtual environment follow the steps below (verified on Ubuntu):
 ```bash
 git clone https://github.com/1chizhang/Lightning
 cd Lightning
-conda create -n Lightning python=3.11
+conda create -n Lightning python=3.11 -y
+conda activate Lightning
 pip install -U pip
 pip install -e .
+pip install -r requirements.txt
+pip3 install --upgrade torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
 pip install lightning
 pip install tensorboard
 ```
