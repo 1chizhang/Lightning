@@ -20,24 +20,24 @@ class Config:
         persistent_workers = True
 
     class Trainer:
-        train_batch_size = 8
         accelerator = 'gpu'
         devices = [1,0]  # list of devices to train on
-        num_epochs = 200
+        num_epochs = 320
         seed = 1234
-        net_lr = 0.0001*len(devices)*train_batch_size/16
+        train_batch_size = 8  # Must match Data.train_batch_size for correct LR scaling
+        net_lr = 0.0001*len(devices)*train_batch_size/16  # Linear LR scaling: base_lr * (global_bs / reference_bs)
 
         validation_cadence = 1  # [epochs]
-        gradient_clip_norm = 2.0  # necessary for gradient-exploding-free training
+        gradient_clip_norm = 5.0  # necessary for gradient-exploding-free training
 
-        ckpt_path ="/home/yichi/Project/Lightning/ckpt/tcm-lambda=0.013-beta=None/lightning_logs/version_0/checkpoints/epoch=2-loss=1.6389-loss_ema=0.0000-last.ckpt"  # 'path/to/a/checkpoint'
+        # ckpt_path = "path/to/checkpoint.ckpt"  # Uncomment and set path to resume training
         log_cadence = 25  # [steps] Note: global_steps=accumulated total number of calling step() for any optimizer
                           # but this value gets compared to the number of training_steps which is counted only once for
                           # each usage of training_step
         
         strategy = 'auto'  # "ddp_find_unused_parameters_true" or "auto"
         float32_matmul_precision = 'high'
-        # precision = '16-true'
+        # precision = '16-true' #enable mixed precision training, not tested, do not use without validation
         compile = True
         ema = True
         

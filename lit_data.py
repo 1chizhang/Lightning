@@ -24,7 +24,7 @@ class CLIC(LightningDataModule):
         self.valid_transform = transforms.Compose([transforms.CenterCrop(valid_patch_size), transforms.ToTensor()])
 
     def setup(self, stage):
-        self.clic_train = ImageFolder(root=self.data_dir, split='train2017', transform=self.train_transform)
+        self.clic_train = ImageFolder(root=self.data_dir, split='MLIC-Train-100K', transform=self.train_transform)
         self.clic_valid = ImageFolder(root=self.data_dir, split='kodak', transform=self.valid_transform)
 
     def train_dataloader(self):
